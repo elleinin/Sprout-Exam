@@ -13,11 +13,11 @@ class Employee(models.Model):
 class Regular(Employee):
     number_of_leaves = fields.FloatField(null=True)
     benefits = fields.JSONField(null=True)
-    def __str__(self):
-        return f"{self.last_name}, {self.first_name}"
+    # def __str__(self):
+    #     return f"{self.last_name}, {self.first_name}"
 
 class Contractual(Employee):
     contract_end_date = fields.DateField(null=True)
-    benefits = fields.DateField(null=True)
-    def __str__(self):
-        return f"{self.last_name}, {self.first_name}"
+    benefits = fields.JSONField(null=True)
+    # def __str__(self):
+    #     return f"{self.last_name}, {self.first_name}"
