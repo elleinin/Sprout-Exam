@@ -1,4 +1,5 @@
-from typing import Optional
+import json
+from typing import Optional, List
 from unicodedata import name
 
 from pydantic import BaseModel
@@ -6,14 +7,12 @@ from tortoise.contrib.pydantic import pydantic_model_creator
 
 from src.database.models import Regular
 
-RegularInSchema = pydantic_model_creator(
-    Regular, name="RegularIn", exclude_readonly=True
-)
-RegularOutSchema = pydantic_model_creator(
-    Regular, name="RegularOut"
+RegularEmpSchema = pydantic_model_creator(
+    Regular, name="RegularEmployee"
 )
 
-class UpdateRegularEmployee(BaseModel):
-    first_name: Optional[str]
-    last_name: Optional[str]
-    email = Optional[str]
+class UpdateRegularEmp(BaseModel):
+    number_of_leaves: Optional[float]
+    benefits: Optional[List]
+    # class Config:
+    #     arbitrary_types_allowed = True

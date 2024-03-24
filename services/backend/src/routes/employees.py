@@ -9,13 +9,12 @@ from tortoise.exceptions import DoesNotExist
 from tortoise.contrib.fastapi import HTTPNotFoundError
 
 import src.store.employees as store
-from src.schemas.employees import UserInSchema, UserOutSchema, UserDatabaseSchema
-
+from src.schemas.employees import EmployeeSchema
 
 router = APIRouter()
 
-@router.post("/register", response_model=UserOutSchema)
-async def create_user(user: UserDatabaseSchema) -> UserOutSchema:
+@router.post("/register", response_model=EmployeeSchema)
+async def create_user(user: EmployeeSchema) -> EmployeeSchema:
     return await store.create_user(user)
 
 @router.get("/employees")
@@ -26,8 +25,8 @@ async def get_all():
 async def get_count():
     return await store.get_count()
 
-@router.get("/employee/{id}", response_model=UserDatabaseSchema)
-async def get_user(id: int) -> UserDatabaseSchema:
+@router.get("/employee/{id}", response_model=EmployeeSchema)
+async def get_user(id: int) -> EmployeeSchema:
     try:
         return await store.get_user(id)
     except DoesNotExist:
