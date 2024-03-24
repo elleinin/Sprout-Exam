@@ -12,3 +12,8 @@ RegularInSchema = pydantic_model_creator(
 RegularOutSchema = pydantic_model_creator(
     Regular, name="RegularOut"
 )
+
+class UpdateRegularEmployee(BaseModel):
+    first_name: Optional[str]
+    last_name: Optional[str]
+    email = Optional[str]
