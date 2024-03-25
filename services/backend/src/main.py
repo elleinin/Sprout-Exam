@@ -9,6 +9,9 @@ from src.database.config import TORTOISE_ORM
 Tortoise.init_models(["src.database.models"], "models")
 
 from src.routes import employees
+from src.routes import regular
+from src.routes import contractual
+import src.store.employees as store
 
 app = FastAPI()
 
@@ -22,9 +25,11 @@ app.add_middleware(
 )
 
 app.include_router(employees.router)
+app.include_router(regular.router)
+app.include_router(contractual.router)
 
 register_tortoise(app, config=TORTOISE_ORM, generate_schemas=False)
 
 @app.get("/")
 def home():
-    return "Hello, World!"
+    return "count!"

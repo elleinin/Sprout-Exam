@@ -3,27 +3,24 @@ from tortoise import BaseDBAsyncClient
 
 async def upgrade(db: BaseDBAsyncClient) -> str:
     return """
-        CREATE TABLE IF NOT EXISTS "contractual" (
+        CREATE TABLE IF NOT EXISTS "employee" (
     "id" SERIAL NOT NULL PRIMARY KEY,
     "first_name" VARCHAR(50),
     "last_name" VARCHAR(50),
     "email" VARCHAR(50),
-    "contract_end_date" DATE,
-    "benefits" JSONB
+    "employee_type" VARCHAR(50) NOT NULL
 );
-CREATE TABLE IF NOT EXISTS "employee" (
+CREATE TABLE IF NOT EXISTS "contractual" (
     "id" SERIAL NOT NULL PRIMARY KEY,
-    "first_name" VARCHAR(50),
-    "last_name" VARCHAR(50),
-    "email" VARCHAR(50)
+    "contract_end_date" VARCHAR(50),
+    "project" TEXT,
+    "employee_id_id" INT NOT NULL REFERENCES "employee" ("id") ON DELETE CASCADE
 );
 CREATE TABLE IF NOT EXISTS "regular" (
     "id" SERIAL NOT NULL PRIMARY KEY,
-    "first_name" VARCHAR(50),
-    "last_name" VARCHAR(50),
-    "email" VARCHAR(50),
     "number_of_leaves" DOUBLE PRECISION,
-    "benefits" JSONB
+    "benefits" JSONB,
+    "employee_id_id" INT NOT NULL REFERENCES "employee" ("id") ON DELETE CASCADE
 );
 CREATE TABLE IF NOT EXISTS "aerich" (
     "id" SERIAL NOT NULL PRIMARY KEY,
