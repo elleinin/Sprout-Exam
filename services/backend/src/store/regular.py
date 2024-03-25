@@ -7,8 +7,13 @@ from tortoise.exceptions import DoesNotExist, IntegrityError
 from src.database.models import Regular
 from src.schemas.regulars import RegularSchema, UpdateRegularEmp
 
+# async def create_user(data, id) -> RegularSchema:
+#     data_obj = data.dict(exclude_unset=True)
+#     profile = await Employee.create(**user_obj)
+#     return await EmployeeSchema.from_tortoise_orm(profile)
+
 async def get_all():
-    return await Regular.filter().values_list()
+    return await Regular.filter().values()
 
 async def get_employee(employee_id) -> RegularSchema:
     try:

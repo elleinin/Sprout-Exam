@@ -8,7 +8,7 @@ from src.database.models import Contractual
 from src.schemas.contractuals import ContractualSchema, UpdateContractualEmp
 
 async def get_all():
-    return await Contractual.filter().values_list()
+    return await Contractual.filter().values()
 
 async def get_employee(employee_id) -> ContractualSchema:
     try:

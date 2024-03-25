@@ -8,19 +8,19 @@ from fastapi.responses import JSONResponse
 from tortoise.exceptions import DoesNotExist
 from tortoise.contrib.fastapi import HTTPNotFoundError
 
-import src.store.employees as store
+import src.store.contractual as store
 from src.schemas.contractuals import ContractualSchema, UpdateContractualEmp
 
 router = APIRouter()
 
 @router.get("/contractual")
 async def get_all():
-    return await store.get_all_contractual_emp()
+    return await store.get_all()
 
 @router.get("/contractual/{id}")
 async def get_employee(id):
-    return await store.get_contractual_emp(id)
+    return await store.get_employee(id)
 
 @router.patch("/contractual/{id}", response_model=ContractualSchema)
 async def update_employee(id: int, data: UpdateContractualEmp) -> ContractualSchema:
-    return await store.update_contractual_emp(id, data)
+    return await store.update_contractual(id, data)

@@ -12,13 +12,17 @@ from src.schemas.employees import EmployeeSchema, ProfileSchema
 
 # universal user functions
 
-async def create_user(user) -> EmployeeSchema:
+async def create_user(user, type) -> EmployeeSchema:
     user_obj = user.dict(exclude_unset=True)
-    profile = await Employee.create(**user_obj)
-    if user_obj["employee_type"] == "Regular":
-        await Regular.create()
-    elif user_obj["employee_type"] == "Contractual":
-        await Contractual.create()
+    profile = await Employee.create(**user_obj) # create employee profile entry
+    # id_count = await get_id_count()
+    # last = await Employee.get(id=id_count)
+    # print(last)
+    data = {"profile": profile}
+    if type == "Regular":
+        await Regular.create(**data)
+    elif type == "Contractual":
+        await Contractual.create(**data)
     return await EmployeeSchema.from_tortoise_orm(profile)
 
 async def delete_user(user_id, type):
@@ -56,9 +60,20 @@ async def update_user(user, user_id):
         raise HTTPException(status_code=400, detail=f"Error updating user {user_id}")
     return await ProfileSchema.from_queryset_single(Employee.get(user_id=user_id))
 
-# async def get_count() -> int: # for testing
-#     user_count = await get_all()
-#     return len(user_count)
-
 async def get_all():
-    return await Employee.filter().values_list()
+    return await Employee.filter().values()
+
+async def get_id_count():
+    list = await get_all()
+    count = len(list)
+    print(count)
+    if count > 0:
+        return count
+    else:
+        return 0
+
+async def wipe(): # for testing
+    await Employee.filter().delete()
+    await Regular.filter().delete()
+    await Contractual.filter().delete()
+    return f"Deleted"

@@ -14,8 +14,8 @@ from src.schemas.employees import EmployeeSchema
 router = APIRouter()
 
 @router.post("/register", response_model=EmployeeSchema)
-async def create_user(user: EmployeeSchema) -> EmployeeSchema:
-    return await store.create_user(user)
+async def create_user(user:EmployeeSchema, type) -> EmployeeSchema:
+    return await store.create_user(user, type)
 
 @router.delete(
     "/employee/{id}",
@@ -44,3 +44,6 @@ async def get_all():
 # async def get_count():
 #     return await store.get_count()
 
+@router.delete("/wipe")
+async def wipe():
+    return await store.wipe()
