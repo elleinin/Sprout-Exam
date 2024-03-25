@@ -9,7 +9,7 @@ from tortoise.exceptions import DoesNotExist
 from tortoise.contrib.fastapi import HTTPNotFoundError
 
 import src.store.employees as store
-from src.schemas.regulars import RegularEmpSchema, UpdateRegularEmp
+from src.schemas.regulars import RegularSchema, UpdateRegularEmp
 
 router = APIRouter()
 
@@ -21,6 +21,6 @@ async def get_all():
 async def get_employee(id):
     return await store.get_regular_emp(id)
 
-@router.patch("/regular/{id}", response_model=RegularEmpSchema)
-async def update_employee(id: int, data: UpdateRegularEmp) -> RegularEmpSchema:
+@router.patch("/regular/{id}", response_model=RegularSchema)
+async def update_employee(id: int, data: UpdateRegularEmp) -> RegularSchema:
     return await store.update_regular_emp(id, data)

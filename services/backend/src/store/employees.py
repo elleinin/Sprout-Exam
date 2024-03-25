@@ -7,18 +7,19 @@ from tortoise.exceptions import DoesNotExist, IntegrityError
 
 from src.database.models import Employee, Regular, Contractual
 from src.store.regular import delete_employee as delete_regular
+from src.store.contractual import delete_employee as delete_contractual
 from src.schemas.employees import EmployeeSchema, ProfileSchema
 
 # universal user functions
 
-async def create_user(user) -> ProfileSchema:
+async def create_user(user) -> EmployeeSchema:
     user_obj = user.dict(exclude_unset=True)
     profile = await Employee.create(**user_obj)
     if user_obj["employee_type"] == "Regular":
         await Regular.create()
     elif user_obj["employee_type"] == "Contractual":
         await Contractual.create()
-    return await ProfileSchema.from_tortoise_orm(profile)
+    return await EmployeeSchema.from_tortoise_orm(profile)
 
 async def delete_user(user_id, type):
     try:
@@ -28,6 +29,8 @@ async def delete_user(user_id, type):
 
     if type == "Regular":
         await delete_regular(user_id)
+    elif type == "Contractual":
+        await delete_contractual(user_id)
     
     deleted_count = await Employee.filter(id=user_id).delete()
     if not deleted_count:

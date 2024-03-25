@@ -16,4 +16,4 @@ ProfileSchema = pydantic_model_creator(
 class UpdateEmployee(BaseModel):
     first_name: Optional[str]
     last_name: Optional[str]
-    email = Optional[str]
+    email: Optional[str]

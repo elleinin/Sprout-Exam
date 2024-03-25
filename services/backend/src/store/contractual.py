@@ -5,7 +5,7 @@ from passlib.context import CryptContext
 from tortoise.exceptions import DoesNotExist, IntegrityError
 
 from src.database.models import Contractual
-from src.schemas.regulars import ContractualSchema, UpdateContractualEmp
+from src.schemas.contractuals import ContractualSchema, UpdateContractualEmp
 
 async def get_all():
     return await Contractual.filter().values_list()

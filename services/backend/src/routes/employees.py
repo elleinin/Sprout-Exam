@@ -17,13 +17,14 @@ router = APIRouter()
 async def create_user(user: EmployeeSchema) -> EmployeeSchema:
     return await store.create_user(user)
 
-@router.get("/employees")
-async def get_all():
-    return await store.get_all()
-
-@router.get("/count")
-async def get_count():
-    return await store.get_count()
+@router.delete(
+    "/employee/{id}",
+    responses={
+        400: {"model": HTTPNotFoundError}
+    },
+)
+async def delete_user(id: int, type):
+    return await store.delete_user(id, type)
 
 @router.get("/employee/{id}", response_model=EmployeeSchema)
 async def get_user(id: int) -> EmployeeSchema:
@@ -35,11 +36,11 @@ async def get_user(id: int) -> EmployeeSchema:
             detail="Note does not exist",
         )
 
-@router.delete(
-    "/employee/{id}",
-    responses={
-        400: {"model": HTTPNotFoundError}
-    },
-)
-async def delete_user(id: int):
-    return await store.delete_user(id)
+@router.get("/employees")
+async def get_all():
+    return await store.get_all()
+
+# @router.get("/count") # for testing
+# async def get_count():
+#     return await store.get_count()
+
