@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional
 from unicodedata import name
 
 from pydantic import BaseModel
@@ -12,4 +12,4 @@ ContractualSchema = pydantic_model_creator(
 
 class UpdateContractualEmp(BaseModel):
     contract_end_date: Optional[str]
-    benefits: Optional[List]
+    benefits: Optional[str]

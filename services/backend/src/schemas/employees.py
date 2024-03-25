@@ -10,10 +10,10 @@ EmployeeSchema = pydantic_model_creator(
     Employee, name="UserIn", exclude_readonly=True
 )
 ProfileSchema = pydantic_model_creator(
-    Employee, name="UserOut", exclude=["id","email"]
+    Employee, name="UserOut", exclude=["id"]
 )
 
-# class UpdateEmployee(BaseModel):
-#     first_name: Optional[str]
-#     last_name: Optional[str]
-#     email = Optional[str]
+class UpdateEmployee(BaseModel):
+    first_name: Optional[str]
+    last_name: Optional[str]
+    email = Optional[str]
