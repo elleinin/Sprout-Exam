@@ -22,3 +22,8 @@ class Contractual(models.Model):
     profile = fields.ForeignKeyField("models.Employee", related_name="Contractual Employee")
     contract_end_date = fields.CharField(max_length=50, null=True)
     project = fields.TextField(null=True)
+
+class Admin(models.Model):
+    id = fields.UUIDField(pk=True)
+    username = fields.CharField(max_length=50)
+    password = fields.CharField(max_length=50)

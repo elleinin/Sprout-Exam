@@ -13,7 +13,7 @@ from src.schemas.regulars import RegularSchema, UpdateRegularEmp
 
 router = APIRouter()
 
-@router.get("/regular")
+@router.get("/regulars")
 async def get_all():
     return await store.get_all()
 

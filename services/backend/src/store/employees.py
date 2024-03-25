@@ -5,10 +5,11 @@ from passlib.context import CryptContext
 from tortoise.exceptions import DoesNotExist, IntegrityError
 
 
-from src.database.models import Employee, Regular, Contractual
+from src.database.models import Employee, Regular, Contractual, Admin
 from src.store.regular import delete_employee as delete_regular
 from src.store.contractual import delete_employee as delete_contractual
 from src.schemas.employees import EmployeeSchema, ProfileSchema
+from src.schemas.users import AdminSchema
 
 # universal user functions
 
@@ -77,3 +78,16 @@ async def wipe(): # for testing
     await Regular.filter().delete()
     await Contractual.filter().delete()
     return f"Deleted"
+
+# ADMIN USER
+async def create_admin(admin):
+    admin_obj = admin.dict(exclude_unset=True)
+    profile = await Admin.create(**admin_obj)
+    return await AdminSchema.from_tortoise_orm(profile)
+
+async def get_admin(username):
+    try:
+        user = await AdminSchema.from_queryset_single(Admin.get(username=username))
+    except DoesNotExist:
+        raise HTTPException(status_code=404, detail=f"User {username} not found")
+    return user
