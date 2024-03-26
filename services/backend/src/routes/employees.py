@@ -11,12 +11,12 @@ from tortoise.contrib.fastapi import HTTPNotFoundError
 import src.store.employees as store
 from src.schemas.employees import EmployeeSchema
 from src.schemas.users import AdminSchema
-from src.auth.admin import validate_user
+# from src.auth.admin import validate_user
 
-from src.auth.jwthandler import (
-    create_access_token,
-    ACCESS_TOKEN_EXPIRE_MINUTES,
-)
+# from src.auth.jwthandler import (
+#     create_token,
+#     ACCESS_TOKEN_EXPIRE_MINUTES,
+# )
 
 router = APIRouter()
 
@@ -61,35 +61,21 @@ async def wipe():
 
 @router.post("/register", response_model=AdminSchema)
 async def create_user(user: AdminSchema) -> AdminSchema:
-    return await store.create_adminr(user)
+    return await store.create_admin(user)
+
+@router.delete("/register")
+async def delete_user():
+    return await store.delete_admins()
 
 
 @router.post("/login")
-async def login(user: OAuth2PasswordRequestForm = Depends()):
-    user = await validate_user(user)
+async def login(user: AdminSchema):
+    admin = await store.login_admin(user)
 
-    if not user:
+    if not admin:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
-    )
-    token = jsonable_encoder(access_token)
-    content = {"message": "You've successfully logged in. Welcome back!"}
-    response = JSONResponse(content=content)
-    response.set_cookie(
-        "Authorization",
-        value=f"Bearer {token}",
-        httponly=True,
-        max_age=1800,
-        expires=1800,
-        samesite="Lax",
-        secure=False,
-    )
-
-    return response
+    return

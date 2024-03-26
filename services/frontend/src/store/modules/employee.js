@@ -1,13 +1,13 @@
 import axios from 'axios';
 
 const state = {
-    employees: null,
-    employee: null
+    employees: [],
+    employee: [],
 };
 
 const getters = {
     stateEmployees: state => state.employees,
-    stateEmployee: state => state.employee
+    stateEmployee: state => state.employee,
 };
 
 const actions = {
@@ -16,11 +16,11 @@ const actions = {
         await dispatch('getEmployees');
     },
     async getEmployees({ commit }) {
-        let { data } = await axios.get('employees');
+        let [data] = await axios.get(`employees`)
         commit('setEmployees', data);
     },
     async getEmployee({ commit }, id) {
-        let { data } = await axios.get(`employee/${id}`);
+        let [data] = await axios.get(`employee/${id}`);
         commit('setEmployee', data)
     },
     async updateEmployee({}, user) {

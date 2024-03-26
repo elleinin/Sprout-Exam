@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const state = {
-    regulars: null,
-    regular: null
+    regulars: [],
+    regular: []
 };
 
 const getters = {

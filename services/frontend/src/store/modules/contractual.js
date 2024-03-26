@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const state = {
-    contractuals: null,
-    contractual: null
+    contractuals: [],
+    contractual: []
 };
 
 const getters = {

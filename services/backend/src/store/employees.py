@@ -1,5 +1,3 @@
-import profile
-from typing import List
 from fastapi import HTTPException
 from passlib.context import CryptContext
 from tortoise.exceptions import DoesNotExist, IntegrityError
@@ -10,6 +8,8 @@ from src.store.regular import delete_employee as delete_regular
 from src.store.contractual import delete_employee as delete_contractual
 from src.schemas.employees import EmployeeSchema, ProfileSchema
 from src.schemas.users import AdminSchema
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # universal user functions
 
@@ -80,14 +80,19 @@ async def wipe(): # for testing
     return f"Deleted"
 
 # ADMIN USER
-async def create_admin(admin):
-    admin_obj = admin.dict(exclude_unset=True)
-    profile = await Admin.create(**admin_obj)
-    return await AdminSchema.from_tortoise_orm(profile)
 
-async def get_admin(username):
+async def create_admin(user) -> AdminSchema:
     try:
-        user = await AdminSchema.from_queryset_single(Admin.get(username=username))
-    except DoesNotExist:
-        raise HTTPException(status_code=404, detail=f"User {username} not found")
-    return user
+        user_obj = await Admin.create(**user.dict(exclude_unset=True))
+    except IntegrityError:
+        raise HTTPException(status_code=401, detail=f"Sorry, that username already exists.")
+
+    return await AdminSchema.from_tortoise_orm(user_obj)
+
+async def login_admin(user: AdminSchema):
+    admin = await Admin.filter(username=user.username, password=user.password)
+    return admin
+
+async def delete_admins():
+    await Admin.filter().delete()
+    return f"Deleted"

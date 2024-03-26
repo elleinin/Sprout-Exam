@@ -7,6 +7,11 @@ Niña Gabrielle (Ninielle) Pascual
 **To build:**
 `$ docker-compose up -d --build`
 
+**To initialize db config**
+`$ docker-compose exec backend aerich init -t src.database.config.TORTOISE_ORM`
+
+`$ docker-compose exec backend aerich init-db`
+
 **To access the services, you may open:**
 * `http://localhost:5001` - to access backend services
 * `http://localhost:5001/docs` - to access api documentation with swagger
